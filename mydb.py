@@ -12,6 +12,11 @@ cursor_object = data_base.cursor()
 print("Kết nối thành công")
 
 # tạo database "library"
-# cursor_object.execute("CREATE DATABASE library")
+cursor_object.execute("CREATE DATABASE library")
+print("Tạo database thành công")
 
-# print("Tạo database thành công")
+# xóa database
+# cursor_object.execute("DROP DATABASE library")
+# print("Xóa database thành công")
+    
+data_base.close()
