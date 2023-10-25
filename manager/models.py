@@ -1,99 +1,116 @@
 from django.db import models
 
-class TacGia(models.Model):
-    # định nghĩa các trường của model Tác giả
-    ma_tac_gia = models.CharField(max_length=8, primary_key=True)
-    ten_tac_gia = models.CharField(max_length=50)
+# define Author model
+class Author(models.Model):
+    # fields
+    author_id = models.CharField(max_length=8, primary_key=True)
+    name = models.CharField(max_length=50)
     
+    # define metadata
     class Meta:
-        # sắp xếp data theo thứ tự mã tác giả
-        ordering = ['ma_tac_gia']
+        # order by author_id
+        ordering = ['author_id']
     
     def __str__(self):
-        return f'{self.ma_tac_gia}, {self.ten_tac_gia}'
+        return f'{self.author_id}, {self.name}'
     
-class TheLoai(models.Model):
-    # định nghĩa các trường của model Thể loại
-    ma_the_loai = models.CharField(max_length=8, primary_key=True)
-    ten_the_loai = models.CharField(max_length=50)
+# define Category model
+class Category(models.Model):
+    # fields
+    cate_id = models.CharField(max_length=8, primary_key=True)
+    name = models.CharField(max_length=50)
     
+    # define metadata
     class Meta:
-        # sắp xếp data theo thứ tự mã thể loại
-        ordering = ['ma_the_loai']
+        # order by cate_id
+        ordering = ['cate_id']
     
     def __str__(self):
-        return f'{self.ma_the_loai}, {self.ten_the_loai}'
+        return f'{self.cate_id}, {self.name}'
 
-class Sach(models.Model):
-    # định nghĩa các trường của model Sách
-    ma_sach = models.CharField(max_length=8, primary_key=True)
-    ten_sach = models.CharField(max_length=50)
-    nam_xuat_ban = models.DateField()
-    nha_xuat_ban = models.CharField(max_length=50)
-    gia = models.IntegerField()
-    so_luong = models.IntegerField()
-    tac_gia = models.ManyToManyField(TacGia)
-    the_loai = models.ManyToManyField(TheLoai)
+# define Book model
+class Book(models.Model):
+    # fields
+    book_id = models.CharField(max_length=8, primary_key=True)
+    title = models.CharField(max_length=50)
+    published_year = models.DateField()
+    publisher = models.CharField(max_length=50)
+    price = models.IntegerField()
+    remaining = models.IntegerField()
+    author = models.ManyToManyField(Author)
+    category = models.ManyToManyField(Category)
     
     class Meta:
-        # sắp xếp data theo thứ tự mã sách
-        ordering = ['ma_sach']
+        # order by book_id
+        ordering = ['book_id']
     
     def __str__(self):
-        return f'{self.ma_sach}, {self.ten_sach}, {self.ten_the_loai}, {self.nam_xuat_ban}, {self.nha_xuat_ban}, {self.gia}, {self.so_luong}'
+        return f'{self.book_id}, {self.title}, {self.ten_the_loai}, {self.published_year}, {self.publisher}, {self.price}, {self.remaining}, {self.author}, {self.category}'
     
-class TheThanhVien(models.Model):
-    # định nghĩa các trường của model Thẻ thư viện
-    ma_the = models.CharField(primary_key=True, max_length=8)
-    cccd = models.CharField(max_length=12)
-    ho_va_ten = models.CharField(max_length=50)
-    dia_chi = models.CharField(max_length=200)
-    sdt = models.CharField(max_length=10)
-    ngay_cap = models.DateField()
+# define Member model
+class Member(models.Model):
+    # fields
+    member_id = models.CharField(primary_key=True, max_length=8)
+    name = models.CharField(max_length=50)
+    address = models.CharField(max_length=200)
+    phone_num = models.CharField(max_length=10)
+    created_at = models.DateField(auto_now_add=True)
     
-    # sắp xếp data theo thứ tự mã thẻ    
+    # order by member_id
     class Meta:
-        ordering = ['ma_the']
+        ordering = ['member_id']
     
     def __str__(self):
-        return f'{self.ma_the}, {self.cccd}, {self.ho_va_ten}, {self.dia_chi}, {self.sdt}, {self.ngay_cap}'
+        return f'{self.member_id}, {self.cccd}, {self.name}, {self.address}, {self.phone_num}, {self.created_at}'
     
-class KyHanMuonSach(models.Model):
-    ky_han = models.CharField(max_length=50, primary_key=True)
-    so_ngay = models.IntegerField()
-    bieu_phi = models.IntegerField()
+# define Term model
+class Term(models.Model):
+    term = models.CharField(max_length=20, primary_key=True)
+    days = models.IntegerField()
+    fee = models.IntegerField()
     
+    # order by term
     class Meta:
-        ordering = ['ky_han']
+        ordering = ['term']
         
     def __str__(self):
-        return f'{self.ky_han}, {self.so_ngay}, {self.bieu_phi}'
+        return f'{self.term}, {self.num_of_days}, {self.fee}'
     
-class BieuMauMuonTra(models.Model):
-    # định nghĩa các trường của model Biểu mẫu mượn - trả
-    ma_bieu_mau = models.CharField(max_length=8, primary_key=True)
-    ma_the = models.ForeignKey(TheThanhVien, on_delete=models.SET_DEFAULT("Unknown"))
-    ngay_muon = models.DateField(auto_now_add=True)
-    ky_han = models.ForeignKey(KyHanMuonSach)
-    ngay_tra = models.DateField()
-    tinh_trang = models.BooleanField()
+# define Borrow model
+class Borrow(models.Model):
+    # fields
+    borrow_id = models.CharField(max_length=8, primary_key=True)
+    member_id = models.ForeignKey(Member, on_delete=models.DO_NOTHING)
+    borrowed_day = models.DateField(auto_now_add=True)
+    term = models.ForeignKey(Term, on_delete=models.DO_NOTHING)
+    return_day = models.DateField()
+    status = models.BooleanField()
     
+    # define metadata
     class Meta:
-        ordering = ['ma_bieu_mau']
+        ordering = ['borrow_id']
     
     def __str__(self):
-        return f'{self.ma_bieu_mau}, {self.ma_the}, {self.ngay_muon}, {self.ky_han}, {self.ngay_tra},  {self.tinh_trang}'
+        return f'{self.borrow_id}, {self.member_id}, {self.borrowed_day}, {self.term}, {self.return_day},  {self.status}'
     
-class ChiTietBieuMauMuonTra(models.Model):
-    # định nghĩa các trường của model Chi tiết biểu mẫu
-    ma_bieu_mau = models.ForeignKey(BieuMauMuonTra, on_delete=models.SET_DEFAULT("Unknown"))
-    ma_sach = models.ForeignKey(Sach)
-    so_luong = models.IntegerField()
-    so_sach_nhan_lai = models.IntegerField()
+# define Detail model
+class Detail(models.Model):
+    # fields
+    borrow_id = models.ForeignKey(Borrow, on_delete=models.DO_NOTHING)
+    book_id = models.ForeignKey(Book, on_delete=models.DO_NOTHING)
+    borrowed = models.IntegerField()
+    returned = models.IntegerField()
     
+    # define metadata
     class Meta:
-        ordering = ['ma_bieu_mau', 'ma_the']
-        unique_together = (("ma_bieu_mau", "ma_sach"),)
+        ordering = ['borrow_id', 'book_id']
+        # set borrow_id and book_id are unique
+        constraints = [
+            models.UniqueConstraint(
+                fields=['borrow_id', 'book_id'], name='unique_borrow_id_book_id_combination'
+            )
+        ]
+        # unique_together = [['borrow_id', 'book_id']]
     
     def __str__(self):
-        return f'{self.ma_bieu_mau}, {self.ma_sach}, {self.so_luong}, {self.so_sach_nhan_lai}'
+        return f'{self.borrow_id}, {self.book_id}, {self.borrowed}, {self.returned}'
