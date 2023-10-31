@@ -1,10 +1,11 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
+from .models import *
 
 class SignUpForm(UserCreationForm):
-    # UserCreationForm mac dinh bao gom cac truong: username, password1 va password2
-    # dinh nghia them cac truong: email, first_name, last_name cho form dang ky
+    # UserCreationForm mặc định các trường: username, password1 va password2
+    # Định nghĩa thêm các trường: email, first_name, last_name cho form dang ky
     email = forms.EmailField(label="", widget=forms.TextInput(
         attrs={
             "class": "form-control",
@@ -24,13 +25,11 @@ class SignUpForm(UserCreationForm):
         }
     ))
     
-    # xac dinh User model co san tu Django se duoc su dung de luu thong tin nguoi dung khi dang ky
-    # User model bao gom 3 truong mac dinh va cong them 3 truong bo sung
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
     
-    # override phuong thuc __init__ cua lop UserCreationForm de customize 3 truong mac dinh
+    # override phương thức __init__ cua lop UserCreationForm để customize 3 trường mặc định
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
 
@@ -48,3 +47,108 @@ class SignUpForm(UserCreationForm):
         self.fields['password2'].widget.attrs['placeholder'] = 'Confirm Password'
         self.fields['password2'].label = ''
         self.fields['password2'].help_text = '<span class="form-text text-muted"><small>Enter the same password as before, for verification.</small></span>'
+
+class AddBook(forms.ModelForm):
+    book_id = forms.CharField(
+        required=True,
+        widget=forms.widgets.TextInput(
+            attrs={
+                'placeholder':'Book ID',
+                'class':'form-control'
+            }
+        )
+    )
+    
+    title = forms.CharField(
+        required=True,
+        widget=forms.widgets.TextInput(
+            attrs={
+                'placeholder':'Title',
+                'class':'form-control'
+            }
+        )
+    )
+    
+    published_year = forms.DateField(
+        required=True,
+        widget=forms.widgets.DateInput(
+            attrs={
+                'placeholder':'Published year',
+                'class':'form-control'
+            }
+        )
+    )
+    
+    publisher = forms.CharField(
+        required=True,
+        widget=forms.widgets.TextInput(
+            attrs={
+                'placeholder':'Publisher',
+                'class':'form-control'
+            }
+        )
+    )
+    
+    price = forms.IntegerField(
+        required=True,
+        widget=forms.widgets.NumberInput(
+            attrs={
+                'placeholder':'Price',
+                'class':'form-control'
+            }
+        )
+    )
+    
+    remaining = forms.IntegerField(
+        required=True,
+        widget=forms.widgets.NumberInput(
+            attrs={
+                'placeholder':'Remaining',
+                'class':'form-control'
+            }
+        )
+    )
+    
+    author = forms.CharField(
+        required=True,
+        widget=forms.widgets.TextInput(
+            attrs={
+                'placeholder':'Authors',
+                'class':'form-control'
+            }
+        )
+    )
+    
+    category = forms.CharField(
+        required=True,
+        widget=forms.widgets.TextInput(
+            attrs={
+                'placeholder':'Categories',
+                'class':'form-control'
+            }
+        )
+    )
+    
+    # author = forms.ModelMultipleChoiceField(
+    #     queryset=Author.objects.all(),
+    #     widget=forms.MultipleHiddenInput(
+    #         attrs={
+    #             'placeholder':'Authors',
+    #             'class':'form-control'
+    #         }
+    #     )
+    # )
+    
+    # category = forms.ModelMultipleChoiceField(
+    #     queryset=Category.objects.all(),
+    #     widget=forms.MultipleHiddenInput(
+    #         attrs={
+    #             'placeholder':'Categories',
+    #             'class':'form-control'
+    #         }
+    #     )
+    # )
+    
+    class Meta:
+        model = Book
+        exclude = ("temp",)

@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # define Author model
 class Author(models.Model):
@@ -41,11 +42,27 @@ class Book(models.Model):
     category = models.ManyToManyField(Category)
     
     class Meta:
-        # order by book_id
+        # sắp xếp record theo thứ tự book_id
         ordering = ['book_id']
+        
+    # hàm lấy danh sách thể loại của cuốn sách
+    def display_category(self):
+        return ', '.join(category.name for category in self.category.all()[:3])
+    
+    # hàm lấy danh sách tác giả của cuốn sách
+    def display_author(self):
+        return ', '.join(author.name for author in self.author.all()[:3])
+    
+    # hàm tạo url liên kết đến trang chi tiết cuốn sách
+    def get_absolute_url(self):
+        return reverse('books-detail', args=[str(self.book_id)])
+
+    # định nghĩa tên cột khi hiển thị trên trang admin
+    display_category.short_description = 'Categories'
+    display_author.short_description = 'Authors'
     
     def __str__(self):
-        return f'{self.book_id}, {self.title}, {self.ten_the_loai}, {self.published_year}, {self.publisher}, {self.price}, {self.remaining}, {self.author}, {self.category}'
+        return f'{self.book_id}, {self.title}, {self.published_year}, {self.publisher}, {self.price}, {self.remaining}, {self.author}, {self.category}'
     
 # define Member model
 class Member(models.Model):
@@ -56,12 +73,15 @@ class Member(models.Model):
     phone_num = models.CharField(max_length=10)
     created_at = models.DateField(auto_now_add=True)
     
-    # order by member_id
     class Meta:
+        # sắp xếp theo thứ tự member_id
         ordering = ['member_id']
+        
+    def get_absolute_url(self):
+        return reverse("member-detail", args=[str(self.member_id)])
     
     def __str__(self):
-        return f'{self.member_id}, {self.cccd}, {self.name}, {self.address}, {self.phone_num}, {self.created_at}'
+        return f'{self.member_id}, {self.name}, {self.address}, {self.phone_num}, {self.created_at}'
     
 # define Term model
 class Term(models.Model):
@@ -74,7 +94,7 @@ class Term(models.Model):
         ordering = ['term']
         
     def __str__(self):
-        return f'{self.term}, {self.num_of_days}, {self.fee}'
+        return f'{self.term}, {self.days}, {self.fee}'
     
 # define Borrow model
 class Borrow(models.Model):
@@ -83,12 +103,16 @@ class Borrow(models.Model):
     member_id = models.ForeignKey(Member, on_delete=models.DO_NOTHING)
     borrowed_day = models.DateField(auto_now_add=True)
     term = models.ForeignKey(Term, on_delete=models.DO_NOTHING)
-    return_day = models.DateField()
+    return_day = models.DateField(null=True, blank=True)
     status = models.BooleanField()
     
-    # define metadata
     class Meta:
+        # sắp xếp các record theo thứ tự borrow_id
         ordering = ['borrow_id']
+        
+    def get_absolute_url(self):
+        return reverse("borrow-detail", args=[str(self.borrow_id)])
+    
     
     def __str__(self):
         return f'{self.borrow_id}, {self.member_id}, {self.borrowed_day}, {self.term}, {self.return_day},  {self.status}'

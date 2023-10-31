@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Borrow ID: {{ borrow.borrow_id }}</h1>
+
+  <p><strong>Member:</strong> {{ borrow.member_id }}</p>
+  <p><strong>Borrowed day:</strong> {{ borrow.borrowed_day }}</p>
+  <p><strong>Term:</strong> {{ borrow.term }}</p>
+  {% if borrow.status %}
+    <p><strong>Return day:</strong> {{ borrow.return_day }}</p>
+  {% endif %}
+  <p><strong>Status:</strong> {{ borrow.status }}</p>
+{% endblock %}

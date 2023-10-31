@@ -1,35 +1,54 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-    {% if not user.is_authenticated %}
-	<div class="col-md-6 offset-md-3">
-		<h1>Login</h1>
-		<br>
-		<form action="{% url 'home' %}" method="POST">
-			{% csrf_token %}
-			<form>
-				<div class="mb-3">
-					<input
-						type="text"
-						class="form-control"
-						name="username"
-						placeholder="User Name"
-					/>
-				</div>
-				<div class="mb-3">
-					<input
-						type="password"
-						class="form-control"
-						name="password"
-						placeholder="Pass Word"
-						required
-					/>
-				</div>
-				<button type="submit" class="btn btn-secondary">Login</button>
-			</form>
-		</form>
-	</div>
-    {% endif %}
+		{% comment %} nếu người dùng đã đăng nhập thì hiển thị trang chính {% endcomment %}
+		{% if user.is_authenticated %}
+			<div class="col-md-6 offset-md-3">
+				<h1>Local Library Home</h1>
+				<p>
+					Welcome to LocalLibrary, a website developed by
+					<em>Mozilla Developer Network</em>!
+				</p>
+				<h2>Dynamic content</h2>
+				<p>The library has the following record counts:</p>
+				<ul>
+					<li><strong>Books:</strong> {{ num_books }}</li>
+					<li><strong>Authors:</strong> {{ num_authors }}</li>
+					<li><strong>Members:</strong> {{ num_members }}</li>
+				</ul>
+				<p>
+					You have visited this page {{ num_visits }} time{{ num_visits|pluralize }}.
+				</p>
+			</div>
+		{% comment %} nếu người dùng chưa đăng nhập thì hiển thị trang đăng nhập {% endcomment %}
+		{% else %}
+			<div class="col-md-6 offset-md-3">
+				<h1>Login</h1>
+				<br>
+				<form action="{% url 'home' %}" method="POST">
+					{% csrf_token %}
+					<form>
+						<div class="mb-3">
+							<input
+								type="text"
+								class="form-control"
+								name="username"
+								placeholder="User Name"
+							/>
+						</div>
+						<div class="mb-3">
+							<input
+								type="password"
+								class="form-control"
+								name="password"
+								placeholder="Pass Word"
+								required
+							/>
+						</div>
+						<button type="submit" class="btn btn-secondary">Login</button>
+					</form>
+				</form>
+			</div>
+		{% endif %}
 
 {% endblock %}

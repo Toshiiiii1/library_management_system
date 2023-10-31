@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Title: {{ book.title }}</h1>
+
+  <p><strong>ID:</strong> {{ book.book_id }}</p>
+  <p><strong>Author:</strong> {{ book.display_author }}</p>
+  <p><strong>Categories:</strong> {{ book.display_category }}</p>
+  <p><strong>Price:</strong> {{ book.price }}</p>
+  <p><strong>Publisher:</strong> {{ book.publisher }}</p>
+  <p><strong>Published year:</strong> {{ book.published_year }}</p>
+{% endblock %}
