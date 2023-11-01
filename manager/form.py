@@ -3,9 +3,10 @@ from django.contrib.auth.models import User
 from django import forms
 from .models import *
 
+# form đăng ký
 class SignUpForm(UserCreationForm):
     # UserCreationForm mặc định các trường: username, password1 va password2
-    # Định nghĩa thêm các trường: email, first_name, last_name cho form dang ky
+    # Định nghĩa thêm các trường: email, first_name, last_name cho form đăng ký
     email = forms.EmailField(label="", widget=forms.TextInput(
         attrs={
             "class": "form-control",
@@ -26,7 +27,7 @@ class SignUpForm(UserCreationForm):
     ))
     
     class Meta:
-        model = User
+        model = User # định nghĩa model áp dụng form
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
     
     # override phương thức __init__ cua lop UserCreationForm để customize 3 trường mặc định
@@ -48,6 +49,59 @@ class SignUpForm(UserCreationForm):
         self.fields['password2'].label = ''
         self.fields['password2'].help_text = '<span class="form-text text-muted"><small>Enter the same password as before, for verification.</small></span>'
 
+# form thêm tác giả
+class AddAuthor(forms.ModelForm):
+    author_id = forms.CharField(
+        required=True,
+        widget=forms.widgets.TextInput(
+            attrs={
+                'placeholder':'Author ID',
+                'class':'form-control'
+            }
+        )
+    )
+    
+    name = forms.CharField(
+        required=True,
+        widget=forms.widgets.TextInput(
+            attrs={
+                'placeholder':"Author's name",
+                'class':'form-control'
+            }
+        )
+    )
+    
+    class Meta:
+        model = Author # định nghĩa model áp dụng form
+        exclude = ("temp",)
+        
+# form thêm thể loại
+class AddCategory(forms.ModelForm):
+    cate_id = forms.CharField(
+        required=True,
+        widget=forms.widgets.TextInput(
+            attrs={
+                'placeholder':'Category ID',
+                'class':'form-control'
+            }
+        )
+    )
+    
+    name = forms.CharField(
+        required=True,
+        widget=forms.widgets.TextInput(
+            attrs={
+                'placeholder':"Category",
+                'class':'form-control'
+            }
+        )
+    )
+    
+    class Meta:
+        model = Category # định nghĩa model áp dụng form
+        exclude = ("temp",)
+
+# form thêm sách
 class AddBook(forms.ModelForm):
     book_id = forms.CharField(
         required=True,
@@ -109,46 +163,18 @@ class AddBook(forms.ModelForm):
         )
     )
     
-    author = forms.CharField(
-        required=True,
-        widget=forms.widgets.TextInput(
-            attrs={
-                'placeholder':'Authors',
-                'class':'form-control'
-            }
-        )
+    author = forms.ModelChoiceField(
+        queryset=Author.objects.all(),
     )
     
-    category = forms.CharField(
-        required=True,
-        widget=forms.widgets.TextInput(
-            attrs={
-                'placeholder':'Categories',
-                'class':'form-control'
-            }
-        )
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.all(),
     )
-    
-    # author = forms.ModelMultipleChoiceField(
-    #     queryset=Author.objects.all(),
-    #     widget=forms.MultipleHiddenInput(
-    #         attrs={
-    #             'placeholder':'Authors',
-    #             'class':'form-control'
-    #         }
-    #     )
-    # )
-    
-    # category = forms.ModelMultipleChoiceField(
-    #     queryset=Category.objects.all(),
-    #     widget=forms.MultipleHiddenInput(
-    #         attrs={
-    #             'placeholder':'Categories',
-    #             'class':'form-control'
-    #         }
-    #     )
-    # )
     
     class Meta:
-        model = Book
+        model = Book # định nghĩa model áp dụng form
         exclude = ("temp",)
+        
+# form thêm biểu mẫu mượn - trả
+class Borrow(forms.ModelForm):
+    pass

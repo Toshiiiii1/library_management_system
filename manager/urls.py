@@ -10,6 +10,8 @@ urlpatterns = [
     path('member/<str:pk>', views.MemberDetail.as_view(), name='member-detail'),
     path('borrow/', views.BorrowList.as_view(), name='borrow'),
     path('borrow/<str:pk>', views.BorrowDetail.as_view(), name='borrow-detail'),
+    path('addauthor/', views.add_author, name='addauthor'),
+    path('addcategory/', views.add_category, name='addcategory'),
     
     path('logout/', views.logout_user, name='logout'),
     path('register/', views.register_user, name='register'),

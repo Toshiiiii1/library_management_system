@@ -8,11 +8,37 @@
         <form method="POST" action="{% url 'addbook' %}">
             {% csrf_token %}
 
-            {{ form.as_p }}
+            {% comment %} {{ form.as_p }} {% endcomment %}
+            </label>Book id:</label>
+            {{ form.book_id }}
+            <br>
+            </label>Title:</label>
+            {{ form.title }}
+            <br>
+            </label>Published year:</label>
+            {{ form.published_year }}
+            <br>
+            </label>Publisher:</label>
+            {{ form.publisher }}
+            <br>
+            </label>Price:</label>
+            {{ form.price }}
+            <br>
+            </label>Remaning:</label>
+            {{ form.remaining }}
+            <br>
+            </label>Author:</label>
+            {{ form.author }}
+            <a href="{% url 'addauthor' %}" class="btn btn-secondary"><i class="fa-solid fa-plus"></i></a>
+            <br><br>
+            </label>Category:</label>
+            {{ form.category }}
+            <a href="{% url 'addcategory' %}" class="btn btn-secondary"><i class="fa-solid fa-plus"></i></a>
+            <br>
 
             <br/>
-            <button type="submit" class="btn btn-secondary">Add Book</button>
-            <a href="{% url 'books' %}" class="btn btn-secondary">Back</a>
+            <button type="submit" class="btn btn-secondary m-1">Add</button>
+            <a href="{% url 'books' %}" class="btn btn-secondary m-1">Back</a>
 
         </form>
 

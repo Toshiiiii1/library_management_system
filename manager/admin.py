@@ -12,7 +12,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ('book_id', 'title', 'published_year', 'publisher', 'price', 'remaining', 'display_author', 'display_category')
+    list_display = ('book_id', 'title', 'published_year', 'publisher', 'price', 'remaining', 'author', 'category')
 
 @admin.register(Member)
 class MemberAdmin(admin.ModelAdmin):
