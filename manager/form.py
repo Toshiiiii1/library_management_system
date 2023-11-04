@@ -49,8 +49,70 @@ class SignUpForm(UserCreationForm):
         self.fields['password2'].label = ''
         self.fields['password2'].help_text = '<span class="form-text text-muted"><small>Enter the same password as before, for verification.</small></span>'
 
+# form thêm tác giả
+class AddAuthor(forms.ModelForm):
+    author_id = forms.CharField(
+        required=True,
+        widget=forms.widgets.TextInput(
+            attrs={
+                'placeholder':'Author ID',
+                'class':'form-control'
+            }
+        )
+    )
+    
+    name = forms.CharField(
+        required=True,
+        widget=forms.widgets.TextInput(
+            attrs={
+                'placeholder':"Author's name",
+                'class':'form-control'
+            }
+        )
+    )
+    
+    class Meta:
+        model = Author # định nghĩa model áp dụng form
+        exclude = ("temp",)
+        
+# form thêm thể loại
+class AddCategory(forms.ModelForm):
+    cate_id = forms.CharField(
+        required=True,
+        widget=forms.widgets.TextInput(
+            attrs={
+                'placeholder':'Category ID',
+                'class':'form-control'
+            }
+        )
+    )
+    
+    name = forms.CharField(
+        required=True,
+        widget=forms.widgets.TextInput(
+            attrs={
+                'placeholder':"Category",
+                'class':'form-control'
+            }
+        )
+    )
+    
+    class Meta:
+        model = Category # định nghĩa model áp dụng form
+        exclude = ("temp",)
+
 # form thêm sách
 class AddBook(forms.ModelForm):
+    book_id = forms.CharField(
+        required=True,
+        widget=forms.widgets.TextInput(
+            attrs={
+                'placeholder':'Book ID',
+                'class':'form-control'
+            }
+        )
+    )
+    
     title = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
@@ -102,51 +164,16 @@ class AddBook(forms.ModelForm):
     )
     
     author = forms.ModelChoiceField(
-        required=True,
-        widget=forms.widgets.TextInput(
-            attrs={
-                'placeholder':'Author',
-                'class':'form-control'
-            }
-        )
+        queryset=Author.objects.all(),
     )
     
     category = forms.ModelChoiceField(
-        required=True,
-        widget=forms.widgets.TextInput(
-            attrs={
-                'placeholder':'Category',
-                'class':'form-control'
-            }
-        )
+        queryset=Category.objects.all(),
     )
     
     class Meta:
         model = Book # định nghĩa model áp dụng form
         exclude = ("temp",)
-        
-    def __init__(self, *args, **kwargs):
-        super(AddBook, self).__init__(*args, **kwargs)
-        
-        self.fields['author'].widget.attrs['class'] = 'form-control'
-        self.fields['category'].widget.attrs['class'] = 'form-control'
-        
-class UpdateBook(forms.ModelForm):
-    class Meta:
-        model = Book
-        fields = ['book_id', 'title', 'published_year', 'publisher', 'price', 'remaining', 'author', 'category']
-        
-    def __init__(self, *args, **kwargs):
-        super(UpdateBook, self).__init__(*args, **kwargs)
-        
-        self.fields['book_id'].widget.attrs['class'] = 'form-control'
-        self.fields['title'].widget.attrs['class'] = 'form-control'
-        self.fields['published_year'].widget.attrs['class'] = 'form-control'
-        self.fields['publisher'].widget.attrs['class'] = 'form-control'
-        self.fields['price'].widget.attrs['class'] = 'form-control'
-        self.fields['remaining'].widget.attrs['class'] = 'form-control'
-        self.fields['author'].widget.attrs['class'] = 'form-control'
-        self.fields['category'].widget.attrs['class'] = 'form-control'
         
 # form thêm biểu mẫu mượn - trả
 class Borrow(forms.ModelForm):

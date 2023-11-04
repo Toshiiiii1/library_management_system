@@ -5,7 +5,7 @@ from django.contrib import messages
 from .form import SignUpForm
 from .models import Book, Author, Member, Borrow
 from django.views import generic
-from .form import AddAuthor, AddBook, AddCategory, UpdateBook
+from .form import AddAuthor, AddBook, AddCategory
 
 # view cho trang chủ
 def home(request):
@@ -81,8 +81,8 @@ def add_author(request):
             # xác thực form
             if (form.is_valid()):
                 form.save()
-                messages.success(request, "Successful")
-                return redirect('addauthor')
+                messages.success(request, "Add done")
+                return redirect('addbook')
         else:
             form = AddAuthor()
             return render(request, "add_author.html", {"form": form})
@@ -90,12 +90,6 @@ def add_author(request):
     else:
         messages.success(request, "You must be login")
         return redirect('home')
-    
-class AddAuthor(generic.CreateView):
-    model = Author
-    form_class = AddAuthor
-    template_name = 'add_author.html'
-    
     
 def add_category(request):
     # nếu người dùng đã đăng nhập
@@ -107,8 +101,8 @@ def add_category(request):
             # xác thực form
             if (form.is_valid()):
                 form.save()
-                messages.success(request, "Successful")
-                return redirect('books')
+                messages.success(request, "Add done")
+                return redirect('addbook')
         else:
             form = AddCategory()
             return render(request, "add_category.html", {"form": form})
@@ -139,15 +133,6 @@ class AddBook(generic.CreateView):
     form_class = AddBook
     template_name = 'addbook.html'
 
-# view xóa sách
-class DeleteBook(generic.DeleteView):
-    model = Book
-    
-class UpdateBook(generic.UpdateView):
-    model = Book
-    template_name = "update_book.html"
-    form_class = UpdateBook
-    
 # view liệt kê danh sách các thành viên
 class MemberList(generic.ListView):
     model = Member
