@@ -19,7 +19,7 @@
 			{% if book_list %}
 				{% for book in book_list %}
 					<tr>
-						<td><a href="{{ book.get_absolute_url }}">{{ book.book_id }}</a></td>
+						<td><a href="{{ book.get_absolute_url }}">{{ book.id }}</a></td>
 						<td>
 							{{ book.title }}
 						</td>
