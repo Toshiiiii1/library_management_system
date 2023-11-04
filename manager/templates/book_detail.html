@@ -1,49 +1,40 @@
 {% extends "base.html" %}
-
 {% block content %}
 <div class="col-md-6 offset-md-3">
-  <div class="card">
-    <div class="card-header">
-        <strong>
-          {{ book.title }}
-        </strong>
-    </div>
-    <div class="card-body">
-        <p class="card-text">
-            <strong>ID: </strong>{{ book.book_id }}
-        </p>
-        <p class="card-text">
-            <strong>Author: </strong>{{ book.author }}
-        </p>
-        <p class="card-text">
-            <strong>Categories: </strong>{{ book.category }}
-        </p>
-            
-        <p class="card-text">
-            <strong>Price: </strong>{{ book.price }}
-        </p>
-            
-        <p class="card-text">
-            <strong>City: </strong>{{ customer_record.city }}
-        </p>
-            
-        <p class="card-text">
-            <strong>Publisher: </strong>{{ book.publisher }}
-        </p>
-            
-        <p class="card-text">
-            <strong>Publisher: </strong>{{ book.publisher }}
-        </p>
-            
-        <p class="card-text">
-            <strong>Published year: </strong>{{ book.published_year }}
-        </p>
-    </div>
-  </div>
+	<div class="card">
+		<div class="card-header">
+			<strong> {{ book.title }} </strong>
+		</div>
+		<div class="card-body">
+			<p class="card-text"><strong>ID: </strong>{{ book.book_id }}</p>
+			<p class="card-text"><strong>Author: </strong>{{ book.author }}</p>
+			<p class="card-text">
+				<strong>Categories: </strong>{{ book.category }}
+			</p>
 
-  <br/><br/>
-  <a href="{% url 'books' %}" class="btn btn-secondary">Back</a>
-  <a href="" class="btn btn-danger">Delete</a>
-  <a href="" class="btn btn-secondary">Update record</a>
+			<p class="card-text"><strong>Price: </strong>{{ book.price }}</p>
+
+			<p class="card-text">
+				<strong>Publisher: </strong>{{ book.publisher }}
+			</p>
+
+			<p class="card-text">
+				<strong>Publisher: </strong>{{ book.publisher }}
+			</p>
+
+			<p class="card-text">
+				<strong>Published year: </strong>{{ book.published_year }}
+			</p>
+		</div>
+	</div>
+
+	<br /><br />
+	<a href="{% url 'books' %}" class="btn btn-secondary m-1">Back</a>
+	<a href="{% url 'deletebook' book.book_id%}" class="btn btn-danger m-1"
+		>Delete</a
+	>
+	<a href="{% url 'updatebook' book.book_id%}" class="btn btn-secondary m-1"
+		>Update record</a
+	>
 </div>
 {% endblock %}
