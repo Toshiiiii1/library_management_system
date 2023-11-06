@@ -14,7 +14,10 @@ urlpatterns = [
     path('member/<int:pk>', views.MemberDetail.as_view(), name='member-detail'),
     
     path('borrow/', views.BorrowList.as_view(), name='borrow'),
-    path('borrow/<int:pk>', views.BorrowDetail.as_view(), name='borrow-detail'),
+    path('borrow/<int:pk>', views.borrow_detail, name='borrow-detail'),
+    path('addborrow/', views.AddBorrow.as_view(), name='addborrow'),
+    path('deleteborrow/<int:pk>', views.DeleteBorrow.as_view(), name='delete-borrow'),
+    path('updateborrow/<int:pk>', views.UpdateBorrow.as_view(), name='update-borrow'),
     
     path('logout/', views.logout_user, name='logout'),
     path('register/', views.register_user, name='register'),

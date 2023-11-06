@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="col-md-6 offset-md-3">
+        <h2>Xác nhận xóa {{ borrow.id }}</h2>
+        <form method="post">
+            {% csrf_token %}
+            <p>Bạn có chắc muốn xóa {{ borrow.id }}?</p>
+            <input type="submit" class="btn btn-danger m-1" value="Xóa" />
+            <a href="{% url 'borrow-detail' borrow.id%}" class="btn btn-secondary m-1">Hủy</a>
+        </form>
+    </div>
+{% endblock %}

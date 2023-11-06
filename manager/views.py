@@ -102,7 +102,9 @@ class UpdateBook(generic.UpdateView):
     model = Book
     form_class = UpdateBookForm
     template_name = 'update_book.html'
-    success_url = reverse_lazy('books')
+    
+    def get_success_url(self):
+        return reverse('books-detail', args=[str(self.object.pk)])
 
 # view liệt kê danh sách các thành viên
 class MemberList(generic.ListView):
@@ -127,3 +129,39 @@ class BorrowDetail(generic.DetailView):
     model = Borrow
     template_name = 'borrow_detail.html'
     paginate_by = 10
+    
+def borrow_detail(request, pk):
+    borrow = Borrow.objects.get(id=pk)
+    detail_list = Detail.objects.all()
+    
+    context = {
+        'borrow': borrow,
+        'detail_list': detail_list
+    }
+    
+    # xac thuc nguoi dung da dang nhap
+    if (request.user.is_authenticated):
+        return render(request, "borrow_detail.html", {'context': context})
+    else:
+        messages.success(request, "You must be login")
+        return redirect('home')
+    
+class AddBorrow(generic.CreateView):
+    model = Borrow
+    form_class = AddBorrow
+    template_name = 'add_borrow.html'
+    
+# view xóa mượn - trả
+class DeleteBorrow(generic.DeleteView):
+    model = Borrow
+    template_name = 'delete_borrow.html'
+    success_url = reverse_lazy('borrow')
+    
+# view cập nhật mượn - trả
+class UpdateBorrow(generic.UpdateView):
+    model = Borrow
+    form_class = UpdateBorrowForm
+    template_name = 'update_borrow.html'
+    
+    def get_success_url(self):
+        return reverse('borrow-detail', args=[str(self.object.pk)])

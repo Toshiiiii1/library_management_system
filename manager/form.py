@@ -2,6 +2,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 from .models import *
+from datetime import date
+from django.contrib import messages
 
 # form đăng ký
 class SignUpForm(UserCreationForm):
@@ -133,6 +135,7 @@ class AddBookForm(forms.ModelForm):
         model = Book # định nghĩa model áp dụng form
         exclude = ("temp",)
         
+# form sửa thông tin sách
 class UpdateBookForm(forms.ModelForm):
     class Meta:
         model = Book
@@ -149,3 +152,71 @@ class UpdateBookForm(forms.ModelForm):
         self.fields['author'].widget.attrs['class'] = 'form-control'
         self.fields['category'].widget.attrs['class'] = 'form-control'
         
+# form thêm mượn - trả
+class AddBorrow(forms.ModelForm):
+    member_id = forms.ModelChoiceField(
+        required=True,
+        queryset = Member.objects.all(),
+        widget=forms.widgets.Select(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+    
+    return_day = forms.DateField(
+        widget=forms.widgets.DateInput(
+            attrs={
+                'placeholder':'Return day',
+                'class':'form-control'
+            }
+        )
+    )
+    
+    status = forms.BooleanField(
+        required=False
+    )
+    
+    detail = forms.MultipleChoiceField(
+        widget=forms.widgets.SelectMultiple(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+    
+    # kiểm tra ngày hẹn trả
+    def clean_return_day(self):
+        return_day = self.cleaned_data.get('return_day')
+
+        if return_day and return_day <= date.today():
+            raise forms.ValidationError("Error")
+
+        # Trả về giá trị đã kiểm tra
+        return return_day
+    
+    class Meta:
+        model = Borrow
+        exclude = ("temp",)
+        
+# form sửa mượn - trả
+class UpdateBorrowForm(forms.ModelForm):
+    class Meta:
+        model = Borrow
+        exclude = ("temp",)
+        
+    # kiểm tra ngày hẹn trả
+    def clean_return_day(self):
+        return_day = self.cleaned_data.get('return_day')
+
+        if return_day and return_day <= date.today():
+            raise forms.ValidationError("Error")
+
+        # Trả về giá trị đã kiểm tra
+        return return_day
+        
+    def __init__(self, *args, **kwargs):
+        super(UpdateBorrowForm, self).__init__(*args, **kwargs)
+        
+        self.fields['member_id'].widget.attrs['class'] = 'form-control'
+        self.fields['return_day'].widget.attrs['class'] = 'form-control'

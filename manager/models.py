@@ -52,7 +52,7 @@ class Borrow(models.Model):
     member_id = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True)
     borrowed_day = models.DateField(auto_now_add=True)
     return_day = models.DateField(null=True, blank=True)
-    status = models.BooleanField()
+    status = models.BooleanField(default=False)
     
     class Meta:
         pass

@@ -7,7 +7,7 @@
             {% csrf_token %}
             <p>Bạn có chắc muốn xóa {{ book.title }}?</p>
             <input type="submit" class="btn btn-danger" value="Xóa" />
-            <a href="{% url 'books' %}" class="btn btn-secondary">Hủy</a>
+            <a href="{% url 'books-detail' book.id%}" class="btn btn-secondary">Hủy</a>
         </form>
     </div>
 {% endblock %}
