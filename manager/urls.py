@@ -12,6 +12,9 @@ urlpatterns = [
     
     path('member/', views.MemberList.as_view(), name='member'),
     path('member/<int:pk>', views.MemberDetail.as_view(), name='member-detail'),
+    path('addmember/', views.AddMember.as_view(), name='addmember'),
+    path('deletemember/<int:pk>', views.DeleteMember.as_view(), name='delete-member'),
+    path('updatemember/<int:pk>', views.UpdateMember.as_view(), name='update-member'),
     
     path('borrow/', views.BorrowList.as_view(), name='borrow'),
     path('borrow/<int:pk>', views.borrow_detail, name='borrow-detail'),

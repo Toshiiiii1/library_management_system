@@ -1,9 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Name: {{ member.name }}</h1>
-
-  <p><strong>ID:</strong> {{ member.member_id }}</p>
-  <p><strong>Address:</strong> {{ member.address }}</p>
-  <p><strong>Phone number:</strong> {{ member.phone_num }}</p>
+  <div class="col-md-6 offset-md-3">
+    <div class="card">
+      <div class="card-header">
+          <strong>
+            {{ member.name }}
+          </strong>
+      </div>
+      <div class="card-body">
+          <p class="card-text">
+              <strong>ID: </strong>{{ member.id }}
+          </p>
+          <p class="card-text">
+              <strong>Created at: </strong>{{ member.created_at }}
+          </p>
+      </div>
+    </div>
+  
+    <br/><br/>
+    <a href="{% url 'member' %}" class="btn btn-secondary">Back</a>
+    <a href="{% url 'delete-member' member.id%}" class="btn btn-danger">Delete</a>
+    <a href="{% url 'update-member' member.id%}" class="btn btn-secondary">Update record</a>
+  </div>
 {% endblock %}

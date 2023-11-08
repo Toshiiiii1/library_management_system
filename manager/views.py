@@ -118,6 +118,28 @@ class MemberDetail(generic.DetailView):
     model = Member
     template_name = 'member_detail.html'
     paginate_by = 10
+
+# view thêm thành viên
+class AddMember(generic.CreateView):
+    model = Member
+    # sử dụng form AddMember
+    form_class = AddMemberForm
+    template_name = 'addmember.html'
+    
+# view xóa thành viên
+class DeleteMember(generic.DeleteView):
+    model = Member
+    template_name = 'delete_member.html'
+    success_url = reverse_lazy('member')
+    
+# view cập nhật thành viên
+class UpdateMember(generic.UpdateView):
+    model = Member
+    form_class = UpdateMemberForm
+    template_name = 'update_member.html'
+    
+    def get_success_url(self):
+        return reverse('member-detail', args=[str(self.object.pk)])
     
 class BorrowList(generic.ListView):
     model = Borrow
