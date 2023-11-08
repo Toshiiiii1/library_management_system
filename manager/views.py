@@ -81,8 +81,6 @@ class BookList(generic.ListView):
 class BookDetail(generic.DetailView):
     model = Book
     template_name = 'book_detail.html'
-    # giới hạn 10 phần tử vào 1 trang hiển thị
-    paginate_by = 10
 
 # view thêm sách
 class AddBook(generic.CreateView):
@@ -117,7 +115,6 @@ class MemberList(generic.ListView):
 class MemberDetail(generic.DetailView):
     model = Member
     template_name = 'member_detail.html'
-    paginate_by = 10
     
 class BorrowList(generic.ListView):
     model = Borrow
@@ -125,23 +122,26 @@ class BorrowList(generic.ListView):
     queryset = Borrow.objects.all()
     template_name = 'borrow.html'
     
-class BorrowDetail(generic.DetailView):
-    model = Borrow
-    template_name = 'borrow_detail.html'
-    paginate_by = 10
-    
 def borrow_detail(request, pk):
     borrow = Borrow.objects.get(id=pk)
-    detail_list = Detail.objects.all()
+    detail_list = Detail.objects.filter(borrow_id=borrow.id)
+    
+    fee = 0
+    expire = 0
+    for i in detail_list:
+        if (i.returned is None):
+            continue
+        fee += 10000*(i.borrowed - i.returned)
     
     context = {
         'borrow': borrow,
-        'detail_list': detail_list
+        'detail_list': detail_list,
+        'fee': fee,
     }
     
     # xac thuc nguoi dung da dang nhap
     if (request.user.is_authenticated):
-        return render(request, "borrow_detail.html", {'context': context})
+        return render(request, "borrow_detail.html", context=context)
     else:
         messages.success(request, "You must be login")
         return redirect('home')
@@ -150,6 +150,7 @@ class AddBorrow(generic.CreateView):
     model = Borrow
     form_class = AddBorrow
     template_name = 'add_borrow.html'
+    success_url = reverse_lazy('adddetail')
     
 # view xóa mượn - trả
 class DeleteBorrow(generic.DeleteView):
@@ -165,3 +166,24 @@ class UpdateBorrow(generic.UpdateView):
     
     def get_success_url(self):
         return reverse('borrow-detail', args=[str(self.object.pk)])
+    
+# view thêm chi tiết
+class AddDetail(generic.CreateView):
+    model = Detail
+    form_class = AddDetailForm
+    template_name = 'add_detail.html'
+    success_url = reverse_lazy('adddetail')
+    
+class UpdateDetail(generic.UpdateView):
+    model = Detail
+    form_class = UpdateDetail
+    template_name = 'update_detail.html'
+    
+    def get_success_url(self):
+        return reverse('borrow-detail', args=[str(self.object.borrow_id.id)])
+    
+class DeleteDetail(generic.DeleteView):
+    model = Detail
+    template_name = 'delete_detail.html'
+    def get_success_url(self):
+        return reverse('borrow-detail', args=[str(self.object.borrow_id.id)])

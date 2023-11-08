@@ -177,14 +177,6 @@ class AddBorrow(forms.ModelForm):
         required=False
     )
     
-    detail = forms.MultipleChoiceField(
-        widget=forms.widgets.SelectMultiple(
-            attrs={
-                'class':'form-control'
-            }
-        )
-    )
-    
     # kiểm tra ngày hẹn trả
     def clean_return_day(self):
         return_day = self.cleaned_data.get('return_day')
@@ -208,7 +200,7 @@ class UpdateBorrowForm(forms.ModelForm):
     # kiểm tra ngày hẹn trả
     def clean_return_day(self):
         return_day = self.cleaned_data.get('return_day')
-
+        
         if return_day and return_day <= date.today():
             raise forms.ValidationError("Error")
 
@@ -220,3 +212,79 @@ class UpdateBorrowForm(forms.ModelForm):
         
         self.fields['member_id'].widget.attrs['class'] = 'form-control'
         self.fields['return_day'].widget.attrs['class'] = 'form-control'
+        
+# form thêm chi tiết
+class AddDetailForm(forms.ModelForm):
+    
+    borrow_id = forms.ModelChoiceField(
+        required=True,
+        queryset=Borrow.objects.all(),
+        widget=forms.widgets.Select(
+            attrs={
+                'class':'form-control'
+            }
+        ),
+    )
+    
+    book_id = forms.ModelChoiceField(
+        required=True,
+        queryset=Book.objects.all(),
+        widget=forms.widgets.Select(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+    
+    borrowed = forms.IntegerField(
+        required=True,
+        widget=forms.widgets.NumberInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+    
+    returned = forms.IntegerField(
+        required=False,
+        initial=0,
+        widget=forms.widgets.NumberInput(
+            attrs={
+                'class':'form-control',
+            }
+        ),
+    )
+    
+    class Meta:
+        model = Detail
+        fields = ('borrow_id', 'book_id', 'borrowed')
+        
+    def clean_borrowed(self):
+        remaining = self.cleaned_data.get('book_id').remaining
+        borrow_num = self.cleaned_data.get('borrowed')
+        
+        if (borrow_num > remaining):
+            raise forms.ValidationError("Error")
+        
+        return borrow_num
+        
+class UpdateDetail(forms.ModelForm):
+    class Meta:
+        model = Detail
+        fields = ('book_id', 'borrowed', 'returned')
+        
+    def __init__(self, *args, **kwargs):
+        super(UpdateDetail, self).__init__(*args, **kwargs)
+        
+        self.fields['book_id'].widget.attrs['class'] = 'form-control'
+        self.fields['borrowed'].widget.attrs['class'] = 'form-control'
+        self.fields['returned'].widget.attrs['class'] = 'form-control'
+        
+    def clean_borrowed(self):
+        remaining = self.cleaned_data.get('book_id').remaining
+        borrow_num = self.cleaned_data.get('borrowed')
+        
+        if (borrow_num > remaining):
+            raise forms.ValidationError("Error")
+        
+        return borrow_num

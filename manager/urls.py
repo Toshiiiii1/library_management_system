@@ -19,6 +19,11 @@ urlpatterns = [
     path('deleteborrow/<int:pk>', views.DeleteBorrow.as_view(), name='delete-borrow'),
     path('updateborrow/<int:pk>', views.UpdateBorrow.as_view(), name='update-borrow'),
     
+    # path('detail/<int:pk>', views.borrow_detail, name='detail'),
+    path('adddetail/', views.AddDetail.as_view(), name='adddetail'),
+    path('deletedetail/<int:pk>', views.DeleteDetail.as_view(), name='delete-detail'),
+    path('updatedetail/<int:pk>', views.UpdateDetail.as_view(), name='update-detail'),
+    
     path('logout/', views.logout_user, name='logout'),
     path('register/', views.register_user, name='register'),
 ]

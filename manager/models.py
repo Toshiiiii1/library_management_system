@@ -28,7 +28,7 @@ class Book(models.Model):
         return reverse('books-detail', args=[str(self.id)])
     
     def __str__(self):
-        return f'{self.title}, {self.published_year}, {self.publisher}, {self.price}, {self.remaining}, {self.author}, {self.category}'
+        return f'{self.title}, {self.author}'
     
 # định nghĩa model Member
 class Member(models.Model):
@@ -41,7 +41,7 @@ class Member(models.Model):
     
     # hàm tạo url liên kết đến trang chi tiết thành viên
     def get_absolute_url(self):
-        return reverse("member-detail", args=[str(self.member_id)])
+        return reverse("member-detail", args=[str(self.id)])
     
     def __str__(self):
         return f'{self.name}'
@@ -62,7 +62,7 @@ class Borrow(models.Model):
         return reverse("borrow-detail", args=[str(self.id)])
     
     def __str__(self):
-        return f'{self.member_id}, {self.borrowed_day}, {self.return_day}, {self.status}'
+        return f'{self.id}, {self.member_id}'
     
 # định nghĩa model Detail
 class Detail(models.Model):
@@ -70,7 +70,7 @@ class Detail(models.Model):
     borrow_id = models.ForeignKey(Borrow, on_delete=models.SET_NULL, null=True)
     book_id = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)
     borrowed = models.IntegerField()
-    returned = models.IntegerField(null=True, blank=True)
+    returned = models.IntegerField(null=True)
     
     class Meta:
         # sắp xếp các record theo thứ tự borrow_id và book_id
@@ -84,3 +84,6 @@ class Detail(models.Model):
     
     def __str__(self):
         return f'{self.borrow_id}, {self.book_id}, {self.borrowed}, {self.returned}'
+    
+    def get_absolute_url(self):
+        return reverse("update-detail", args=[str(self.id)])
