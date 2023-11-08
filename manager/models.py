@@ -41,10 +41,10 @@ class Member(models.Model):
     
     # hàm tạo url liên kết đến trang chi tiết thành viên
     def get_absolute_url(self):
-        return reverse("member-detail", args=[str(self.member_id)])
+        return reverse("member-detail", args=[str(self.id)])
     
     def __str__(self):
-        return f'{self.name}'
+        return f'{self.name}, {self.created_at}'
     
 # định nghĩa model Borrow
 class Borrow(models.Model):

@@ -1,16 +1,30 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<h1>Member List</h1>
-	{% if member_list %}
-		<ul>
-			{% for member in member_list %}
-			<li>
-				<a href="{{ member.get_absolute_url }}">{{ member.member_id }}</a>
-				({{member.name}})
-			</li>
-			{% endfor %}
-		</ul>
-	{% else %}
-		<p>There are no members in the library.</p>
-	{% endif %}
+	<h1>Member List</h1>
+	<table class="table table-striped table-hover table-bordered">
+		<thead class="table-dark">
+			<tr>
+				<th scope="col">ID</th>
+				<th scope="col">Name</th>
+				<th scope="col">Created at</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% if member_list %}
+				{% for member in member_list %}
+					<tr>
+						<td><a href="{{ member.get_absolute_url }}">{{ member.id }}</a></td>
+						<td>
+							{{ member.name }}
+						</td>
+						<td>{{ member.created_at }}</td>
+					</tr>
+				{% endfor %}
+			{% else %}
+				<p>There are no members in the library.</p>
+			{% endif %}
+		</tbody>
+	</table>
+	<a href="{% url 'addmember' %}" class="btn btn-secondary">Add member</a>
 {% endblock %}
