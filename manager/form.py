@@ -151,7 +151,44 @@ class UpdateBookForm(forms.ModelForm):
         self.fields['remaining'].widget.attrs['class'] = 'form-control'
         self.fields['author'].widget.attrs['class'] = 'form-control'
         self.fields['category'].widget.attrs['class'] = 'form-control'
+
+# form thêm thành viên
+class AddMemberForm(forms.ModelForm):
+    name = forms.CharField(
+        required=True,
+        widget=forms.widgets.TextInput(
+            attrs={
+                'placeholder':'Name',
+                'class':'form-control'
+            }
+        )
+    )
+    
+    created_at = forms.DateField(
+        required=True,
+        widget=forms.widgets.DateInput(
+            attrs={
+                'placeholder':'Created at',
+                'class':'form-control'
+            }
+        )
+    )
+    
+    class Meta:
+        model = Member # định nghĩa model áp dụng form
+        exclude = ("temp",)
         
+# form sửa thông tin thành viên
+class UpdateMemberForm(forms.ModelForm):
+    class Meta:
+        model = Member
+        exclude = ("temp",)
+        
+    def __init__(self, *args, **kwargs):
+        super(UpdateMemberForm, self).__init__(*args, **kwargs)
+        
+        self.fields['name'].widget.attrs['class'] = 'form-control'
+
 # form thêm mượn - trả
 class AddBorrow(forms.ModelForm):
     member_id = forms.ModelChoiceField(

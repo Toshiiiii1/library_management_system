@@ -44,7 +44,7 @@ class Member(models.Model):
         return reverse("member-detail", args=[str(self.id)])
     
     def __str__(self):
-        return f'{self.name}'
+        return f'{self.name}, {self.created_at}'
     
 # định nghĩa model Borrow
 class Borrow(models.Model):
