@@ -21,14 +21,18 @@ class Book(models.Model):
     category = models.CharField(max_length=50, choices=categories)
     
     class Meta:
-        pass
+        constraints = [
+            models.UniqueConstraint(
+                fields=['title', 'author'], name='unique_title_author_combination'
+            )
+        ]
     
     # hàm tạo url liên kết đến trang chi tiết cuốn sách
     def get_absolute_url(self):
         return reverse('books-detail', args=[str(self.id)])
     
     def __str__(self):
-        return f'{self.title}, {self.author}'
+        return f'{self.id}, {self.title}, {self.author}'
     
 # định nghĩa model Member
 class Member(models.Model):

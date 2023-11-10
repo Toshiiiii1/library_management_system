@@ -210,10 +210,6 @@ class AddBorrow(forms.ModelForm):
         )
     )
     
-    status = forms.BooleanField(
-        required=False
-    )
-    
     # kiểm tra ngày hẹn trả
     def clean_return_day(self):
         return_day = self.cleaned_data.get('return_day')
@@ -226,7 +222,7 @@ class AddBorrow(forms.ModelForm):
     
     class Meta:
         model = Borrow
-        exclude = ("temp",)
+        fields = ('member_id', 'return_day')
         
 # form sửa mượn - trả
 class UpdateBorrowForm(forms.ModelForm):
@@ -297,12 +293,13 @@ class AddDetailForm(forms.ModelForm):
         fields = ('borrow_id', 'book_id', 'borrowed')
         
     def clean_borrowed(self):
-        remaining = self.cleaned_data.get('book_id').remaining
+        book_instance = Book.objects.get(id=self.cleaned_data.get('book_id').id)
         borrow_num = self.cleaned_data.get('borrowed')
         
-        if (borrow_num > remaining):
+        if (borrow_num > book_instance.remaining):
             raise forms.ValidationError("Error")
-        
+        book_instance.remaining -= borrow_num
+        book_instance.save()
         return borrow_num
         
 class UpdateDetail(forms.ModelForm):
@@ -315,13 +312,17 @@ class UpdateDetail(forms.ModelForm):
         
         self.fields['book_id'].widget.attrs['class'] = 'form-control'
         self.fields['borrowed'].widget.attrs['class'] = 'form-control'
+        self.fields['borrowed'].disabled = True
         self.fields['returned'].widget.attrs['class'] = 'form-control'
-        
-    def clean_borrowed(self):
-        remaining = self.cleaned_data.get('book_id').remaining
+    
+    def clean_returned(self):
+        book_instance = Book.objects.get(id=self.cleaned_data.get('book_id').id)
+        return_num = self.cleaned_data.get('returned')
         borrow_num = self.cleaned_data.get('borrowed')
+        print(borrow_num)
         
-        if (borrow_num > remaining):
+        if (return_num and return_num > borrow_num):
             raise forms.ValidationError("Error")
-        
-        return borrow_num
+        book_instance.remaining += return_num
+        book_instance.save()
+        return return_num
