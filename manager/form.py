@@ -278,16 +278,6 @@ class AddDetailForm(forms.ModelForm):
         )
     )
     
-    returned = forms.IntegerField(
-        required=False,
-        initial=0,
-        widget=forms.widgets.NumberInput(
-            attrs={
-                'class':'form-control',
-            }
-        ),
-    )
-    
     class Meta:
         model = Detail
         fields = ('borrow_id', 'book_id', 'borrowed')
@@ -319,7 +309,6 @@ class UpdateDetail(forms.ModelForm):
         book_instance = Book.objects.get(id=self.cleaned_data.get('book_id').id)
         return_num = self.cleaned_data.get('returned')
         borrow_num = self.cleaned_data.get('borrowed')
-        print(borrow_num)
         
         if (return_num and return_num > borrow_num):
             raise forms.ValidationError("Error")

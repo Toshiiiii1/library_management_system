@@ -152,14 +152,22 @@ def borrow_detail(request, pk):
     fee = 0
     expire = 0
     for i in detail_list:
+        print(i.book_id)
         if (i.returned is None):
             continue
-        fee += 10000*(i.borrowed - i.returned)
+        book_instance = Book.objects.get(id=i.book_id_id)
+        return_day = Borrow.objects.get(id=i.borrow_id_id).return_day
+        late_days = date.today() - return_day
+        expire = 10000*(late_days.days) if (late_days.days > 0) else 0
+        fee += book_instance.price*(i.borrowed - i.returned)
+    total = fee + expire
     
     context = {
         'borrow': borrow,
         'detail_list': detail_list,
         'fee': fee,
+        'expire': expire,
+        'total': total,
     }
     
     # xac thuc nguoi dung da dang nhap
