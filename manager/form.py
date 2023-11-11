@@ -164,16 +164,6 @@ class AddMemberForm(forms.ModelForm):
         )
     )
     
-    created_at = forms.DateField(
-        required=True,
-        widget=forms.widgets.DateInput(
-            attrs={
-                'placeholder':'Created at',
-                'class':'form-control'
-            }
-        )
-    )
-    
     class Meta:
         model = Member # định nghĩa model áp dụng form
         exclude = ("temp",)
