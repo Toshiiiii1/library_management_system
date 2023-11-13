@@ -13,7 +13,8 @@ class Book(models.Model):
     ]
     # fields
     title = models.CharField(max_length=50)
-    published_year = models.DateField()
+    description = models.CharField(max_length=500)
+    published_date = models.DateField()
     publisher = models.CharField(max_length=50)
     price = models.IntegerField()
     remaining = models.IntegerField()
@@ -74,7 +75,7 @@ class Detail(models.Model):
     borrow_id = models.ForeignKey(Borrow, on_delete=models.SET_NULL, null=True)
     book_id = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)
     borrowed = models.IntegerField()
-    returned = models.IntegerField(null=True)
+    returned = models.IntegerField(default=0)
     
     class Meta:
         # sắp xếp các record theo thứ tự borrow_id và book_id

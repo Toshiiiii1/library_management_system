@@ -49,11 +49,11 @@
         {% endif %}
 
         <br />
-        <a href="{% url 'borrow' %}" class="btn btn-secondary m-1">Back</a>
+        <a href="{% url 'borrow' %}" class="btn btn-primary m-1">Back</a>
         <a href="{% url 'delete-borrow' borrow.id %}" class="btn btn-danger m-1"
             >Delete</a
         >
-        <a href="{% url 'update-borrow' borrow.id %}" class="btn btn-secondary m-1"
+        <a href="{% url 'update-borrow' borrow.id %}" class="btn btn-success m-1"
             >Update record</a
         >
     </div>

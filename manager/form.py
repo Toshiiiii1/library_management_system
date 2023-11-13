@@ -63,11 +63,21 @@ class AddBookForm(forms.ModelForm):
         )
     )
     
-    published_year = forms.DateField(
+    description = forms.CharField(
+        required=True,
+        widget=forms.widgets.TextInput(
+            attrs={
+                'placeholder':'Description',
+                'class':'form-control'
+            }
+        )
+    )
+    
+    published_date = forms.DateField(
         required=True,
         widget=forms.widgets.DateInput(
             attrs={
-                'placeholder':'Published year',
+                'placeholder':'YYYY-MM-DD',
                 'class':'form-control'
             }
         )
@@ -145,7 +155,8 @@ class UpdateBookForm(forms.ModelForm):
         super(UpdateBookForm, self).__init__(*args, **kwargs)
         
         self.fields['title'].widget.attrs['class'] = 'form-control'
-        self.fields['published_year'].widget.attrs['class'] = 'form-control'
+        self.fields['description'].widget.attrs['class'] = 'form-control'
+        self.fields['published_date'].widget.attrs['class'] = 'form-control'
         self.fields['publisher'].widget.attrs['class'] = 'form-control'
         self.fields['price'].widget.attrs['class'] = 'form-control'
         self.fields['remaining'].widget.attrs['class'] = 'form-control'
@@ -159,16 +170,6 @@ class AddMemberForm(forms.ModelForm):
         widget=forms.widgets.TextInput(
             attrs={
                 'placeholder':'Name',
-                'class':'form-control'
-            }
-        )
-    )
-    
-    created_at = forms.DateField(
-        required=True,
-        widget=forms.widgets.DateInput(
-            attrs={
-                'placeholder':'Created at',
                 'class':'form-control'
             }
         )
@@ -204,7 +205,7 @@ class AddBorrow(forms.ModelForm):
     return_day = forms.DateField(
         widget=forms.widgets.DateInput(
             attrs={
-                'placeholder':'Return day',
+                'placeholder':'YYYY-MM-DD',
                 'class':'form-control'
             }
         )

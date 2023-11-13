@@ -7,7 +7,8 @@
 			<tr>
 				<th scope="col">ID</th>
 				<th scope="col">Title</th>
-				<th scope="col">Published year</th>
+				<th scope="col">Description</th>
+				<th scope="col">Published date</th>
 				<th scope="col">Publisher</th>
 				<th scope="col">Price</th>
 				<th scope="col">Remaning</th>
@@ -20,10 +21,9 @@
 				{% for book in book_list %}
 					<tr>
 						<td><a href="{{ book.get_absolute_url }}">{{ book.id }}</a></td>
-						<td>
-							{{ book.title }}
-						</td>
-						<td>{{ book.published_year }}</td> 
+						<td>{{ book.title }}</td>
+						<td>{{ book.description }}</td> 
+						<td>{{ book.published_date }}</td> 
 						<td>{{ book.publisher }} </td>
 						<td>{{ book.price }} </td>
 						<td>{{ book.remaining }} </td>
