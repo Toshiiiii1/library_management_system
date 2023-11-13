@@ -13,7 +13,8 @@ class Book(models.Model):
     ]
     # fields
     title = models.CharField(max_length=50)
-    published_year = models.DateField()
+    description = models.CharField(max_length=500)
+    published_date = models.DateField()
     publisher = models.CharField(max_length=50)
     price = models.IntegerField()
     remaining = models.IntegerField()
