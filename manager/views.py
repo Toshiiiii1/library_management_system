@@ -149,23 +149,28 @@ def borrow_detail(request, pk):
     borrow = Borrow.objects.get(id=pk)
     detail_list = Detail.objects.filter(borrow_id=borrow.id)
     
-    fee = 0
+    fine = 0
     expire = 0
-    for i in detail_list:
-        print(i.book_id)
-        if (i.returned is None):
+    flag = 1
+    for detail in detail_list:
+        print(fine)
+        if (detail.returned is None):
+            flag = 0
             continue
-        book_instance = Book.objects.get(id=i.book_id_id)
-        return_day = Borrow.objects.get(id=i.borrow_id_id).return_day
-        late_days = date.today() - return_day
+        book_instance = Book.objects.get(id=detail.book_id_id)
+        late_days = date.today() - borrow.return_day
         expire = 10000*(late_days.days) if (late_days.days > 0) else 0
-        fee += book_instance.price*(i.borrowed - i.returned)
-    total = fee + expire
+        fine += book_instance.price*(detail.borrowed - detail.returned)
+    total = fine + expire
+    
+    if (flag == 1):
+        borrow.status = True
+        borrow.save()
     
     context = {
         'borrow': borrow,
         'detail_list': detail_list,
-        'fee': fee,
+        'fine': fine,
         'expire': expire,
         'total': total,
     }

@@ -49,7 +49,7 @@ class Member(models.Model):
         return reverse("member-detail", args=[str(self.id)])
     
     def __str__(self):
-        return f'{self.name}, {self.created_at}'
+        return f'{self.id}, {self.name}'
     
 # định nghĩa model Borrow
 class Borrow(models.Model):
@@ -75,7 +75,7 @@ class Detail(models.Model):
     borrow_id = models.ForeignKey(Borrow, on_delete=models.SET_NULL, null=True)
     book_id = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)
     borrowed = models.IntegerField()
-    returned = models.IntegerField(default=0)
+    returned = models.IntegerField(null=True)
     
     class Meta:
         # sắp xếp các record theo thứ tự borrow_id và book_id

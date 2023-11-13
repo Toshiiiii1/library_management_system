@@ -26,7 +26,7 @@
         <table class="table table-striped table-hover table-bordered">
             <thead class="table-dark">
                 <tr>
-                    <th scope="col">Book ID</th>
+                    <th scope="col">Book info</th>
                     <th scope="col">Borrowed</th>
                     <th scope="col">Return</th>
                 </tr>
@@ -43,7 +43,7 @@
         </table>
 
         {% if borrow.status %}
-            <p><strong>Fee: </strong>{{ fee }}</p>
+            <p><strong>Fine: </strong>{{ fine }}</p>
             <p><strong>Expire: </strong>{{ expire }}</p>
             <p><strong>Total: </strong>{{ total }}</p>
         {% endif %}
@@ -53,8 +53,10 @@
         <a href="{% url 'delete-borrow' borrow.id %}" class="btn btn-danger m-1"
             >Delete</a
         >
+        {% if not borrow.status %}
         <a href="{% url 'update-borrow' borrow.id %}" class="btn btn-success m-1"
             >Update record</a
         >
+        {% endif %}
     </div>
 {% endblock %}

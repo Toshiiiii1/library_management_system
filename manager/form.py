@@ -216,7 +216,7 @@ class AddBorrow(forms.ModelForm):
         return_day = self.cleaned_data.get('return_day')
 
         if return_day and return_day <= date.today():
-            raise forms.ValidationError("Error")
+            raise forms.ValidationError("Invalid day")
 
         # Trả về giá trị đã kiểm tra
         return return_day
@@ -229,14 +229,15 @@ class AddBorrow(forms.ModelForm):
 class UpdateBorrowForm(forms.ModelForm):
     class Meta:
         model = Borrow
-        exclude = ("temp",)
+        # exclude = ("temp",)
+        fields = ('member_id', 'return_day')
         
     # kiểm tra ngày hẹn trả
     def clean_return_day(self):
         return_day = self.cleaned_data.get('return_day')
         
         if return_day and return_day <= date.today():
-            raise forms.ValidationError("Error")
+            raise forms.ValidationError("Invalid day")
 
         # Trả về giá trị đã kiểm tra
         return return_day
@@ -288,7 +289,7 @@ class AddDetailForm(forms.ModelForm):
         borrow_num = self.cleaned_data.get('borrowed')
         
         if (borrow_num > book_instance.remaining):
-            raise forms.ValidationError("Error")
+            raise forms.ValidationError("Invalid")
         book_instance.remaining -= borrow_num
         book_instance.save()
         return borrow_num
