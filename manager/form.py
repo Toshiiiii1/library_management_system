@@ -9,12 +9,13 @@ from django.contrib import messages
 class SearchForm(forms.Form):
     search_query = forms.CharField(
         required=False,
-        label='Search',
+        label='',
         max_length=250,
         widget=forms.widgets.TextInput(
             attrs={
-                'class': 'form-control-sm ms-2',
-            }
+                'class': 'form-control-sm mt-3 ms-3',
+                'style': 'height: 20px;',
+            },
         ),
     )
 

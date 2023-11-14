@@ -1,11 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="d-flex justify-content-between align-items-center mb-2">
 	<h1>Borrow List</h1>
+	
+	<form method="GET" action="{% url 'borrow' %}" class="d-flex">
+		{{ search_form }}
+		<button type="submit" class="btn btn-primary m-2">Search</button>
+		<a class="btn btn-primary mt-2 mb-2" href="{% url 'borrow' %}" role="button">Reset</a>
+	</form>
+</div>
 	<table class="table table-striped table-hover table-bordered">
 		<thead class="table-dark">
 			<tr>
 				<th scope="col">ID</th>
-				<th scope="col">Member ID</th>
+				<th scope="col">Member info</th>
 				<th scope="col">Borrowed day</th>
 				<th scope="col">Return day</th>
 				<th scope="col">Status</th>

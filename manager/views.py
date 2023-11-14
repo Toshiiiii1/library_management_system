@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.db import reset_queries
 from .form import SignUpForm
 from .models import *
 from django.views import generic
@@ -70,27 +71,24 @@ def register_user(request):
         return render(request, "register.html", {'form': form})
 
 # view liệt kê danh sách các quyển sách
-class BookList(generic.ListView):
-    model = Book
-    # đặt tên biến để book_list để chứa danh sách các sách
-    context_object_name = 'book_list'
-    template_name = 'books.html'
-    
-    # xử lý tìm kiếm
-    def get_queryset(self):
-        # lấy giá trị truy vấn từ form
-        search_query = self.request.GET.get('search_query', '')
-        # tìm kiếm giá trị đó trong title không phân biệt hoa - thường
-        queryset = Book.objects.filter(title__icontains=search_query)
-        print(type(self.request.GET))
-        return queryset
-    
-    # truyền nhiều biến đến template
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # gửi đến form rỗng cho template sau khi submit, reload trang
-        context['search_form'] = SearchForm()
-        return context
+def book_list(request):
+    # nếu người dùng đăng nhập
+    if request.user.is_authenticated:
+        book_list = Book.objects.all()
+        search_query = request.GET.get('search_query')
+
+        if search_query:
+            # title__icontains: tìm xem title có chứa search_query hay không, bỏ qua hoa-thường
+            book_list = Book.objects.filter(title__icontains=search_query)
+        
+        search_form = SearchForm(initial={'search_query': search_query})
+        context = {'book_list': book_list, 'search_form': search_form}
+        return render(request, 'books.html', context=context)
+    # nếu người dùng chưa đăng nhập
+    else:
+        messages.warning(request, "You must be logged in")
+        return redirect('home')
+
 
 # view hiển thị chi tiết quyển sách
 class BookDetail(generic.DetailView):
@@ -120,11 +118,22 @@ class UpdateBook(generic.UpdateView):
         return reverse('books-detail', args=[str(self.object.pk)])
 
 # view liệt kê danh sách các thành viên
-class MemberList(generic.ListView):
-    model = Member
-    context_object_name = 'member_list'
-    queryset = Member.objects.all()
-    template_name = 'member.html'
+def member_list(request):
+    # nếu người dùng đăng nhập
+    if request.user.is_authenticated:
+        member_list = Member.objects.all()
+        search_query = request.GET.get('search_query')
+
+        if search_query:
+            member_list = Member.objects.filter(name__icontains=search_query)
+        
+        search_form = SearchForm(initial={'search_query': search_query})
+        context = {'member_list': member_list, 'search_form': search_form}
+        return render(request, 'member.html', context=context)
+    # nếu người dùng chưa đăng nhập
+    else:
+        messages.warning(request, "You must be logged in")
+        return redirect('home')
 
 # view hiển thị chi tiết thành viên
 class MemberDetail(generic.DetailView):
@@ -159,6 +168,26 @@ class BorrowList(generic.ListView):
     context_object_name = 'borrow_list'
     queryset = Borrow.objects.all()
     template_name = 'borrow.html'
+
+# view liệt kê danh sách mượn - trả
+def borrow_list(request):
+    # nếu người dùng đăng nhập
+    if request.user.is_authenticated:
+        borrow_list = Borrow.objects.all()
+        search_query = request.GET.get('search_query')
+
+        if search_query:
+            # member_id: khóa ngoại dùng để truy xuất đến bảng Member
+            # member_id__name: lấy tên từ thành viên thông qua member_id
+            borrow_list = Borrow.objects.filter(member_id__name__icontains=search_query)
+        
+        search_form = SearchForm(initial={'search_query': search_query})
+        context = {'borrow_list': borrow_list, 'search_form': search_form}
+        return render(request, 'borrow.html', context=context)
+    # nếu người dùng chưa đăng nhập
+    else:
+        messages.warning(request, "You must be logged in")
+        return redirect('home')
     
 def borrow_detail(request, pk):
     borrow = Borrow.objects.get(id=pk)
@@ -193,7 +222,7 @@ def borrow_detail(request, pk):
     if (request.user.is_authenticated):
         return render(request, "borrow_detail.html", context=context)
     else:
-        messages.success(request, "You must be login")
+        messages.warning(request, "You must be login")
         return redirect('home')
     
 class AddBorrow(generic.CreateView):

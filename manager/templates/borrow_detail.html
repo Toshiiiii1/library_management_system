@@ -34,7 +34,11 @@
             <tbody>
                 {% for detail in detail_list %}
                 <tr>
-                    <td><a href="{{ detail.get_absolute_url }}">{{ detail.book_id }}</td>
+                    {% if detail.returned is None%}
+                        <td><a href="{{ detail.get_absolute_url }}">{{ detail.book_id }}</td>
+                    {% else %}
+                        <td>{{ detail.book_id }}</td>
+                    {% endif %}
                     <td>{{ detail.borrowed }}</td>
                     <td>{{ detail.returned }}</td>
                 </tr>
@@ -50,9 +54,9 @@
 
         <br />
         <a href="{% url 'borrow' %}" class="btn btn-primary m-1">Back</a>
-        <a href="{% url 'delete-borrow' borrow.id %}" class="btn btn-danger m-1"
+        {% comment %} <a href="{% url 'delete-borrow' borrow.id %}" class="btn btn-danger m-1"
             >Delete</a
-        >
+        > {% endcomment %}
         {% if not borrow.status %}
         <a href="{% url 'update-borrow' borrow.id %}" class="btn btn-success m-1"
             >Update record</a

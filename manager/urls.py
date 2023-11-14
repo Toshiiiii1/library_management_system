@@ -4,19 +4,19 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     
-    path('books/', views.BookList.as_view(), name='books'),
+    path('books/', views.book_list, name='books'),
     path('books/<int:pk>', views.BookDetail.as_view(), name='books-detail'),
     path('addbook/', views.AddBook.as_view(), name='addbook'),
     path('deletebook/<int:pk>', views.DeleteBook.as_view(), name='delete-book'),
     path('updatebook/<int:pk>', views.UpdateBook.as_view(), name='update-book'),
     
-    path('member/', views.MemberList.as_view(), name='member'),
+    path('member/', views.member_list, name='members'),
     path('member/<int:pk>', views.MemberDetail.as_view(), name='member-detail'),
     path('addmember/', views.AddMember.as_view(), name='addmember'),
     path('deletemember/<int:pk>', views.DeleteMember.as_view(), name='delete-member'),
     path('updatemember/<int:pk>', views.UpdateMember.as_view(), name='update-member'),
     
-    path('borrow/', views.BorrowList.as_view(), name='borrow'),
+    path('borrow/', views.borrow_list, name='borrow'),
     path('borrow/<int:pk>', views.borrow_detail, name='borrow-detail'),
     path('addborrow/', views.AddBorrow.as_view(), name='addborrow'),
     path('deleteborrow/<int:pk>', views.DeleteBorrow.as_view(), name='delete-borrow'),
