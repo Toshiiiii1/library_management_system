@@ -74,8 +74,23 @@ class BookList(generic.ListView):
     model = Book
     # đặt tên biến để book_list để chứa danh sách các sách
     context_object_name = 'book_list'
-    queryset = Book.objects.all()
     template_name = 'books.html'
+    
+    # xử lý tìm kiếm
+    def get_queryset(self):
+        # lấy giá trị truy vấn từ form
+        search_query = self.request.GET.get('search_query', '')
+        # tìm kiếm giá trị đó trong title không phân biệt hoa - thường
+        queryset = Book.objects.filter(title__icontains=search_query)
+        print(type(self.request.GET))
+        return queryset
+    
+    # truyền nhiều biến đến template
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # gửi đến form rỗng cho template sau khi submit, reload trang
+        context['search_form'] = SearchForm()
+        return context
 
 # view hiển thị chi tiết quyển sách
 class BookDetail(generic.DetailView):
@@ -153,7 +168,6 @@ def borrow_detail(request, pk):
     expire = 0
     flag = 1
     for detail in detail_list:
-        print(fine)
         if (detail.returned is None):
             flag = 0
             continue

@@ -5,6 +5,19 @@ from .models import *
 from datetime import date
 from django.contrib import messages
 
+# form tìm kiếm
+class SearchForm(forms.Form):
+    search_query = forms.CharField(
+        required=False,
+        label='Search',
+        max_length=250,
+        widget=forms.widgets.TextInput(
+            attrs={
+                'class': 'form-control-sm ms-2',
+            }
+        ),
+    )
+
 # form đăng ký
 class SignUpForm(UserCreationForm):
     # UserCreationForm mặc định các trường: username, password1 va password2
