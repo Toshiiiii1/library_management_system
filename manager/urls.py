@@ -10,7 +10,7 @@ urlpatterns = [
     path('deletebook/<int:pk>', views.DeleteBook.as_view(), name='delete-book'),
     path('updatebook/<int:pk>', views.UpdateBook.as_view(), name='update-book'),
     
-    path('member/', views.member_list, name='members'),
+    path('member/', views.member_list, name='member'),
     path('member/<int:pk>', views.MemberDetail.as_view(), name='member-detail'),
     path('addmember/', views.AddMember.as_view(), name='addmember'),
     path('deletemember/<int:pk>', views.DeleteMember.as_view(), name='delete-member'),
