@@ -29,8 +29,9 @@ Truy cập vào [http://127.0.0.1:8000](http://127.0.0.1:8000/)
 
 ## Sửa user và password trong mydb.py
 
-## Sửa file settings.py
+### Sửa file settings.py
 
+```python
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -41,10 +42,13 @@ DATABASES = {
         'PORT':'3306',
     }
 }
+```
 
 ## Nếu bị lỗi "Could not build wheels for mysqlclient, ..." khi install mysqlclient:
-## Thêm vào đầu file settings.py
+### Thêm vào đầu file settings.py
 
+```python
 import pymysql
 pymysql.version_info = (1, 4, 6, 'final', 0)  # (major, minor, micro, releaselevel, serial)
 pymysql.install_as_MySQLdb()
+```
