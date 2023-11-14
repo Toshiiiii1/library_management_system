@@ -209,6 +209,9 @@ def borrow_detail(request, pk):
     if (flag == 1):
         borrow.status = True
         borrow.save()
+    else:
+        borrow.status = False
+        borrow.save()
     
     context = {
         'borrow': borrow,
