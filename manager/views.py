@@ -67,6 +67,13 @@ def register_user(request):
             login(request, user)
             messages.success(request, "Successful")
             return redirect('home')
+        else:
+            # lấy các lỗi từ của form đăng ký
+            error_list = [error for error in form.errors.values()]
+            # hiển thị các lỗi
+            for error in error_list:
+                messages.error(request, error)
+            return redirect('register')
     else:
         form = SignUpForm()
         return render(request, "register.html", {'form': form})
