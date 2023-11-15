@@ -148,7 +148,25 @@ def member_list(request):
 class MemberDetail(generic.DetailView):
     model = Member
     template_name = 'member_detail.html'
-    paginate_by = 10
+    
+
+def member_detail(request, pk):
+    member = Member.objects.get(id=pk)
+    borrow_list = Borrow.objects.filter(member_id__name__icontains=member.name)
+    print(member)
+    print(borrow_list)
+    
+    context = {
+        'member': member,
+        'borrow_list': borrow_list,
+    }
+    
+    # xac thuc nguoi dung da dang nhap
+    if (request.user.is_authenticated):
+        return render(request, "member_detail.html", context=context)
+    else:
+        messages.warning(request, "You must be login")
+        return redirect('home')
 
 # view thêm thành viên
 class AddMember(generic.CreateView):

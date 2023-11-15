@@ -11,7 +11,7 @@ urlpatterns = [
     path('updatebook/<int:pk>', views.UpdateBook.as_view(), name='update-book'),
     
     path('member/', views.member_list, name='member'),
-    path('member/<int:pk>', views.MemberDetail.as_view(), name='member-detail'),
+    path('member/<int:pk>', views.member_detail, name='member-detail'),
     path('addmember/', views.AddMember.as_view(), name='addmember'),
     path('deletemember/<int:pk>', views.DeleteMember.as_view(), name='delete-member'),
     path('updatemember/<int:pk>', views.UpdateMember.as_view(), name='update-member'),

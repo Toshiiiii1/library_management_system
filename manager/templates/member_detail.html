@@ -1,27 +1,51 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="col-md-6 offset-md-3">
-    <div class="card">
-      <div class="card-header">
-          <strong>
-            {{ member.name }}
-          </strong>
-      </div>
-      <div class="card-body">
-          <p class="card-text">
-              <strong>ID: </strong>{{ member.id }}
-          </p>
-          <p class="card-text">
-              <strong>Created at: </strong>{{ member.created_at }}
-          </p>
-      </div>
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-header">
+                <strong> {{ member.name }} </strong>
+            </div>
+            <div class="card-body">
+                <p class="card-text"><strong>ID: </strong>{{ member.id }}</p>
+                <p class="card-text">
+                    <strong>Created at: </strong>{{ member.created_at }}
+                </p>
+            </div>
+        </div>
+        
+        {% if 'borrow_list' %}
+        <table class="table table-striped table-hover table-bordered mt-3">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Borrow ID</th>
+                    <th scope="col">Borrowed day</th>
+                    <th scope="col">Return day</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for borrow in borrow_list %}
+                <tr>
+                    <td><a href="{{ borrow.get_absolute_url }}">{{ borrow.id }}</td>
+                    <td>{{ borrow.borrowed_day }}</td>
+                    <td>{{ borrow.return_day }}</td>
+                    <td>{{ borrow.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+
+        <br /><br />
+        <a href="{% url 'member' %}" class="btn btn-primary m-1">Back</a>
+        <a href="{% url 'delete-member' member.id%}" class="btn btn-danger m-1"
+            >Delete</a
+        >
+        <a href="{% url 'update-member' member.id%}" class="btn btn-success m-1"
+            >Update record</a
+        >
     </div>
-  
-    <br/><br/>
-    <a href="{% url 'member' %}" class="btn btn-primary m-1">Back</a>
-    <a href="{% url 'delete-member' member.id%}" class="btn btn-danger m-1">Delete</a>
-    <a href="{% url 'update-member' member.id%}" class="btn btn-success m-1">Update record</a>
-    <a href="{% url 'register' member.id%}" class="btn btn-success m-1">Create account</a>
-  </div>
+
+    
 {% endblock %}
