@@ -8,6 +8,7 @@ from .form import SignUpForm
 from .models import *
 from django.views import generic
 from .form import *
+import secrets
 
 # view cho trang chủ
 def home(request):
@@ -77,6 +78,18 @@ def register_user(request):
     else:
         form = SignUpForm()
         return render(request, "register.html", {'form': form})
+    
+def create_account(request, pk):
+    if request.user.is_authenticated:
+        member_instance = Member.objects.get(id=pk)
+        user_name = f'{member_instance.name.lower()}{str(member_instance.id)}'
+        password = f'{member_instance.name.lower()}{str(member_instance.id)}'
+        user = User.objects.create_user(username=user_name, password=password)
+        messages.success(request, "Successful")
+        return redirect('member-detail', pk=member_instance.id)
+    else:
+        messages.warning(request, "You must be logged in")
+        return redirect('home')
 
 # view liệt kê danh sách các quyển sách
 def book_list(request):

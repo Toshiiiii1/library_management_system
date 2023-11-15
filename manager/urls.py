@@ -28,5 +28,6 @@ urlpatterns = [
     path('updatedetail/<int:pk>', views.UpdateDetail.as_view(), name='update-detail'),
     
     path('logout/', views.logout_user, name='logout'),
-    path('register/', views.register_user, name='register'),
+    # path('register/', views.register_user, name='register'),
+    path('register<int:pk>/', views.create_account, name='register'),
 ]

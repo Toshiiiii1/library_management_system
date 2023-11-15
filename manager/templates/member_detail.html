@@ -19,8 +19,9 @@
     </div>
   
     <br/><br/>
-    <a href="{% url 'member' %}" class="btn btn-primary">Back</a>
-    <a href="{% url 'delete-member' member.id%}" class="btn btn-danger">Delete</a>
-    <a href="{% url 'update-member' member.id%}" class="btn btn-success">Update record</a>
+    <a href="{% url 'member' %}" class="btn btn-primary m-1">Back</a>
+    <a href="{% url 'delete-member' member.id%}" class="btn btn-danger m-1">Delete</a>
+    <a href="{% url 'update-member' member.id%}" class="btn btn-success m-1">Update record</a>
+    <a href="{% url 'register' member.id%}" class="btn btn-success m-1">Create account</a>
   </div>
 {% endblock %}
