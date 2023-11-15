@@ -56,7 +56,7 @@ def logout_user(request):
     return redirect('home')
 
 # view đăng ký
-def register_user(request):
+def register_staff(request):
     # nếu người dùng ấn "Register"
     if (request.method == 'POST'):
         form = SignUpForm(request.POST)
@@ -78,18 +78,6 @@ def register_user(request):
     else:
         form = SignUpForm()
         return render(request, "register.html", {'form': form})
-    
-def create_account(request, pk):
-    if request.user.is_authenticated:
-        member_instance = Member.objects.get(id=pk)
-        user_name = f'{member_instance.name.lower()}{str(member_instance.id)}'
-        password = f'{member_instance.name.lower()}{str(member_instance.id)}'
-        user = User.objects.create_user(username=user_name, password=password)
-        messages.success(request, "Successful")
-        return redirect('member-detail', pk=member_instance.id)
-    else:
-        messages.warning(request, "You must be logged in")
-        return redirect('home')
 
 # view liệt kê danh sách các quyển sách
 def book_list(request):
