@@ -297,6 +297,13 @@ class AddDetailForm(forms.ModelForm):
     class Meta:
         model = Detail
         fields = ('borrow_id', 'book_id', 'borrowed')
+    
+    def __init__(self, *args, **kwargs):
+        super(AddDetailForm, self).__init__(*args, **kwargs)
+        
+        self.fields['borrow_id'].widget.attrs['class'] = 'form-control'
+        self.fields['borrow_id'].disabled = True
+        self.fields['borrow_id'].initial = self.fields['borrow_id'].queryset.last()
         
     def clean_borrowed(self):
         book_instance = Book.objects.get(id=self.cleaned_data.get('book_id').id)
@@ -317,6 +324,7 @@ class UpdateDetail(forms.ModelForm):
         super(UpdateDetail, self).__init__(*args, **kwargs)
         
         self.fields['book_id'].widget.attrs['class'] = 'form-control'
+        self.fields['book_id'].disabled = True
         self.fields['borrowed'].widget.attrs['class'] = 'form-control'
         self.fields['borrowed'].disabled = True
         self.fields['returned'].widget.attrs['class'] = 'form-control'
