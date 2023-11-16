@@ -3,22 +3,25 @@
 {% block content %}
 		{% comment %} nếu người dùng đã đăng nhập thì hiển thị trang chính {% endcomment %}
 		{% if user.is_authenticated %}
-			<div class="col-md-6 offset-md-3">
-				<h1>Local Library Home</h1>
-				<p>
-					Welcome to LocalLibrary, a website developed by
-					<em>Mozilla Developer Network</em>!
-				</p>
-				<h2>Dynamic content</h2>
+			<div class="col-md-6 offset-md-3 ">
+				<h1>Local Library Management System</h1>
 				<p>The library has the following record counts:</p>
-				<ul>
-					<li><strong>Books:</strong> {{ num_books }}</li>
-					<li><strong>Members:</strong> {{ num_members }}</li>
-				</ul>
-				<p>
-					You have visited this page {{ num_visits }} time{{ num_visits|pluralize }}.
-				</p>
+				<div class="row container text-center">
+					<div class="col border border-2 rounded-4">
+						<p><strong>Books total</strong> <br> {{ num_books }}</p>
+						<button>
+							<a href="{% url 'books' %}">Books list</a>
+						</button>
+					</div>
+					<div class="col border border-2 rounded-4">
+						<p><strong>Members total</strong> <br> {{ num_members }}</p>
+						<button>
+							<a href="{% url 'member' %}">Members list</a>
+						</button>
+					</div>
+				</div>
 			</div>
+
 		{% comment %} nếu người dùng chưa đăng nhập thì hiển thị trang đăng nhập {% endcomment %}
 		{% else %}
 			<div class="col-md-6 offset-md-3">
