@@ -3,12 +3,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse_lazy
 from django.contrib import messages
-from django.db import reset_queries
 from .form import SignUpForm
 from .models import *
 from django.views import generic
 from .form import *
-import secrets
 
 # view cho trang chủ
 def home(request):
