@@ -44,7 +44,5 @@
 			{% endif %}
 		</tbody>
   	</table>
-	{% if user.is_staff%}
 	<a href="{% url 'addbook' %}" class="btn btn-secondary">Add book</a>
-	{% endif %}
 {% endblock %}

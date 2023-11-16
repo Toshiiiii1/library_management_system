@@ -65,7 +65,7 @@ def register_staff(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
             user = authenticate(username=username, password=password)
-            login(request, user)
+            # login(request, user)
             messages.success(request, "Successful")
             return redirect('home')
         else:
