@@ -151,8 +151,6 @@ class MemberDetail(generic.DetailView):
 def member_detail(request, pk):
     member = Member.objects.get(id=pk)
     borrow_list = Borrow.objects.filter(member_id__name__icontains=member.name)
-    print(member)
-    print(borrow_list)
     
     context = {
         'member': member,
